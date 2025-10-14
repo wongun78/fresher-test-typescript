@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "@/App";
-import "styles/global.scss";
+import "./main.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import BookPage from "pages/client/book";
