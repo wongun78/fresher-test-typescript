@@ -8,12 +8,13 @@ import BookPage from "pages/client/book";
 import AboutPage from "pages/client/about";
 import LoginPage from "pages/auth/login";
 import RegisterPage from "pages/auth/register";
-
+import HomePage from "./pages/client/home";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
+      { index: true, element: <HomePage /> },
       {
         path: "/book",
         element: <BookPage />,
