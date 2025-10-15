@@ -20,7 +20,7 @@ const ProtectedRoute = (props: IProps) => {
       </>
     );
   }
-  const isAdminRoute = location.pathname.includes("admin");
+  const isAdminRoute = location.pathname.startsWith("admin");
   if (isAuthenticated === true && isAdminRoute === true) {
     const role = user?.role;
     if (role !== "admin") {

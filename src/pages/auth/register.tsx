@@ -25,7 +25,7 @@ const RegisterPage: React.FC = () => {
       );
 
       if (response.statusCode === 201 || response.statusCode === "201") {
-        message.success("📚 Welcome to our classic book collection!");
+        message.success("Welcome to our classic book collection!");
         navigate("/login");
       } else {
         message.error(response.message || "Register failed!");

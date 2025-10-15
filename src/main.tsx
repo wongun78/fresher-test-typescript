@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { App as AntdApp } from "antd";
+import { App as AntdApp, ConfigProvider } from "antd";
 import App from "@/App";
 import "./main.css";
 
@@ -14,10 +14,12 @@ import { AppProvider } from "./components/context/app.context";
 import CheckoutPage from "./pages/client/checkout";
 import ProtectedRoute from "./components/auth/auth";
 import LayoutAdmin from "./components/layout/layout.admin";
-import DashBoardPage from "./components/admin/dashboard";
-import ManageOrderPage from "./components/admin/manage.order";
-import ManageUserPage from "./components/admin/manage.user";
-import ManageBookPage from "./components/admin/manage.book";
+import DashBoardPage from "./pages/admin/dashboard";
+import ManageOrderPage from "./pages/admin/manage.order";
+import ManageUserPage from "./pages/admin/manage.user";
+import ManageBookPage from "./pages/admin/manage.book";
+import viVN from "antd/locale/vi_VN";
+import enUS from "antd/locale/en_US";
 
 const router = createBrowserRouter([
   {
@@ -88,7 +90,9 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AntdApp>
       <AppProvider>
-        <RouterProvider router={router} />
+        <ConfigProvider locale={enUS}>
+          <RouterProvider router={router} />
+        </ConfigProvider>
       </AppProvider>
     </AntdApp>
   </StrictMode>
