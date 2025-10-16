@@ -32,7 +32,6 @@ const RegisterPage: React.FC = () => {
       }
     } catch (error: any) {
       message.error("Network error. Please try again!");
-      console.error("Register error:", error);
     }
   };
 

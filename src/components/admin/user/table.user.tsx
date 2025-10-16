@@ -1,20 +1,34 @@
+import { getUsersAPI } from "@/services/api";
+import { dateRangeValidate } from "@/services/helper";
 import {
   EllipsisOutlined,
   PlusOutlined,
   UserOutlined,
   EditOutlined,
-  DeleteOutlined,
 } from "@ant-design/icons";
 import type { ActionType, ProColumns } from "@ant-design/pro-components";
-import { ProTable, TableDropdown } from "@ant-design/pro-components";
+import { ProTable } from "@ant-design/pro-components";
 import { Button, Dropdown, Tag, Avatar } from "antd";
-import { useRef } from "react";
-import { type UserItem, waitTime } from "./data";
+import { useRef, useState } from "react";
+
+type TSearch = {
+  fullName?: string;
+  email?: string;
+  createdAt?: string;
+  createdAtRange?: string;
+};
 
 const TableUser = () => {
   const actionRef = useRef<ActionType>();
 
-  const columns: ProColumns<UserItem>[] = [
+  const [meta, setMeta] = useState({
+    current: 1,
+    pageSize: 5,
+    pages: 0,
+    total: 0,
+  });
+
+  const columns: ProColumns<IUserTable>[] = [
     {
       title: <span className="!text-amber-900 !font-bold">STT</span>,
       dataIndex: "index",
@@ -83,6 +97,7 @@ const TableUser = () => {
       filters: true,
       onFilter: true,
       ellipsis: true,
+      hideInSearch: true,
       valueType: "select",
       className: "!text-amber-800",
       valueEnum: {
@@ -114,6 +129,7 @@ const TableUser = () => {
       filters: true,
       onFilter: true,
       valueType: "select",
+      hideInSearch: true,
       className: "!text-amber-800",
       valueEnum: {
         true: {
@@ -138,31 +154,23 @@ const TableUser = () => {
         </Tag>
       ),
     },
-    // {
-    //   title: <span className="!text-amber-900 !font-bold">Created At</span>,
-    //   key: "showTime",
-    //   dataIndex: "createdAt",
-    //   valueType: "date",
-    //   sorter: true,
-    //   hideInSearch: true,
-    //   className: "!text-amber-800",
-    // },
     {
-      title: (
-        <span className="!text-amber-900 !font-bold">Created Date Range</span>
-      ),
+      title: <span className="!text-amber-900 !font-bold">Created At</span>,
+      key: "showTime",
       dataIndex: "createdAt",
       valueType: "dateRange",
-      hideInTable: true,
-      search: {
-        transform: (value) => {
-          return {
-            startTime: value[0],
-            endTime: value[1],
-          };
-        },
+      sorter: true,
+      className: "!text-amber-800",
+      render: (_, record) => {
+        const date = new Date(record.createdAt);
+        return date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
       },
     },
+
     {
       title: <span className="!text-amber-900 !font-bold">Actions</span>,
       valueType: "option",
@@ -187,103 +195,60 @@ const TableUser = () => {
             console.log("View user:", record);
           }}
         ></Button>,
-        <TableDropdown
-          key="actionGroup"
-          onSelect={(key) => {
-            if (key === "delete") {
-              console.log("Delete user:", record);
-            }
-            action?.reload();
-          }}
-          menus={[
-            {
-              key: "copy",
-              name: "Copy User",
-              icon: <UserOutlined className="!text-amber-600" />,
-            },
-            {
-              key: "delete",
-              name: "Delete User",
-              icon: <DeleteOutlined className="!text-red-600" />,
-            },
-          ]}
-        />,
       ],
     },
   ];
 
   return (
     <div className="!bg-gradient-to-b !from-amber-50 !to-orange-50">
-      <ProTable<UserItem>
+      <ProTable<IUserTable, TSearch>
         columns={columns}
         actionRef={actionRef}
         cardBordered
         className="!bg-white !border-2 !border-amber-300 !rounded-lg !shadow-lg !p-4"
-        request={async (params, sort, filter) => {
-          console.log("Request params:", params, sort, filter);
-          await waitTime(1000);
+        request={async (params) => {
+          try {
+            let query = "";
+            if (params) {
+              query += `current=${params.current}&pageSize=${params.pageSize}`;
+              if (params.email) {
+                query += `&email=/${params.email}/i`;
+              }
+              if (params.fullName) {
+                query += `&fullName=/${params.fullName}/i`;
+              }
+              const createdDateRange = dateRangeValidate(params.createdAtRange);
+              if (createdDateRange) {
+                query += `&createdAt>=${createdDateRange[0]}&createdAt<=${createdDateRange[1]}`;
+              }
+            }
+            const res = await getUsersAPI(query);
 
-          const mockUsers: UserItem[] = [
-            {
-              _id: "1",
-              fullName: "John Doe",
-              email: "john.doe@example.com",
-              phone: "+1234567890",
-              role: "ADMIN",
-              avatar: "",
-              isActive: true,
-              createdAt: "2024-01-15",
-              updatedAt: "2024-01-15",
-            },
-            {
-              _id: "2",
-              fullName: "Jane Smith",
-              email: "jane.smith@example.com",
-              phone: "+1234567891",
-              role: "USER",
-              avatar: "",
-              isActive: true,
-              createdAt: "2024-01-16",
-              updatedAt: "2024-01-16",
-            },
-            {
-              _id: "3",
-              fullName: "Bob Wilson",
-              email: "bob.wilson@example.com",
-              phone: "+1234567892",
-              role: "USER",
-              avatar: "",
-              isActive: false,
-              createdAt: "2024-01-17",
-              updatedAt: "2024-01-17",
-            },
-          ];
+            if (res.data?.meta) {
+              setMeta(res.data.meta);
+            }
 
-          return {
-            data: mockUsers,
-            success: true,
-            total: mockUsers.length,
-          };
+            return {
+              data: res.data?.result || [],
+              success: true,
+              total: res.data?.meta?.total || 0,
+            };
+          } catch (error) {
+            return {
+              data: [],
+              success: false,
+              total: 0,
+            };
+          }
         }}
         editable={{
           type: "multiple",
-          onSave: async (rowKey, data, row) => {
-            console.log("Save user:", rowKey, data, row);
-            await waitTime(1000);
-          },
-          onDelete: async (rowKey, data) => {
-            console.log("Delete user:", rowKey, data);
-            await waitTime(1000);
-          },
         }}
         columnsState={{
           persistenceKey: "user-table-columns",
           persistenceType: "localStorage",
           defaultValue: {
             option: { fixed: "right", disable: true },
-          },
-          onChange(value) {
-            console.log("Columns state changed:", value);
           },
         }}
         rowKey="_id"
@@ -308,15 +273,21 @@ const TableUser = () => {
           },
         }}
         pagination={{
-          pageSize: 10,
+          current: meta.current,
+          pageSize: meta.pageSize,
           showSizeChanger: true,
-          showQuickJumper: true,
+          total: meta.total,
           showTotal: (total, range) => (
             <span className="!text-amber-800 !font-medium">
               {`${range[0]}-${range[1]} of ${total} users`}
             </span>
           ),
-          onChange: (page) => console.log("Page changed:", page),
+          onChange: () => {
+            actionRef.current?.reload();
+          },
+          onShowSizeChange: () => {
+            actionRef.current?.reload();
+          },
         }}
         dateFormatter="string"
         headerTitle={
@@ -331,7 +302,6 @@ const TableUser = () => {
             key="add-user"
             icon={<PlusOutlined />}
             onClick={() => {
-              console.log("Add new user");
               actionRef.current?.reload();
             }}
             type="primary"
@@ -362,8 +332,8 @@ const TableUser = () => {
                   icon: <EllipsisOutlined className="!text-amber-600" />,
                 },
               ],
-              onClick: (e) => {
-                console.log("Dropdown action:", e.key);
+              onClick: () => {
+                // Handle dropdown actions
               },
             }}
           >

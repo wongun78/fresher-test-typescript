@@ -34,20 +34,20 @@ export const AppProvider = (props: TProps) => {
     fetchAccount();
   }, []);
 
-  if (isAppLoading) {
-    return (
-      <div
-        style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        <PacmanLoader loading={isAppLoading} size={30} />
-      </div>
-    );
-  }
+  // if (isAppLoading) {
+  //   return (
+  //     <div
+  //       style={{
+  //         position: "fixed",
+  //         top: "50%",
+  //         left: "50%",
+  //         transform: "translate(-50%, -50%)",
+  //       }}
+  //     >
+  //       <PacmanLoader loading={isAppLoading} size={30} />
+  //     </div>
+  //   );
+  // }
 
   return (
     <CurrentAppContext.Provider

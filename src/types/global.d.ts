@@ -15,7 +15,7 @@ declare global {
       pages: number;
       total: number;
     };
-    results: T[];
+    result: T[]; // ✅ Fix: API trả về 'result' thay vì 'results'
   }
 
   interface ILogin {
@@ -45,5 +45,17 @@ declare global {
 
   interface IFetchAccount {
     user: IUser;
+  }
+
+  interface IUserTable {
+    _id: string;
+    fullName: string;
+    email: string;
+    phone: string;
+    role: string;
+    avatar?: string;
+    isActive: boolean;
+    createdAt: Date;
+    updatedAt: Date;
   }
 }
