@@ -90,7 +90,7 @@ const LayoutAdmin = () => {
     const breadcrumbItems = [
       {
         title: (
-          <Link to="/" className="flex items-center space-x-1 !text-amber-800">
+          <Link to="/" className="flex items-center space-x-1">
             <span>Home</span>
           </Link>
         ),
@@ -119,35 +119,64 @@ const LayoutAdmin = () => {
   };
 
   return (
-    <Layout className="!min-h-screen">
-      {/* Fixed Sidebar */}
+    <Layout style={{ minHeight: "100vh" }}>
+      {/* Sidebar */}
       <Sider
         trigger={null}
         collapsible
         collapsed={collapsed}
         width={250}
         collapsedWidth={80}
-        className={`
-          !fixed !left-0 !top-0 !bottom-0 !z-40
-          !h-screen !overflow-y-auto
-          !bg-gradient-to-b !from-amber-50 !to-orange-100 
-          !border-r-4 !border-amber-800
-          ${collapsed ? "!w-20" : "!w-64"}
-          !transition-all !duration-200
-        `}
+        style={{
+          position: "fixed",
+          left: 0,
+          top: 0,
+          bottom: 0,
+          zIndex: 1000,
+          height: "100vh",
+          overflowY: "auto",
+          backgroundColor: "#fff",
+          borderRight: "1px solid #f0f0f0",
+        }}
       >
         {/* Logo Section */}
-        <div className="!h-16 flex items-center justify-center !border-b-2 !border-amber-800 !bg-amber-600">
-          <div className="flex items-center space-x-3">
-            <div className="!w-8 !h-8 !bg-white rounded-lg flex items-center justify-center">
-              <BookOutlined className="!text-amber-600 !text-lg" />
+        <div
+          style={{
+            height: "64px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderBottom: "1px solid #f0f0f0",
+            backgroundColor: "#1890ff",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div
+              style={{
+                width: "32px",
+                height: "32px",
+                backgroundColor: "white",
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <BookOutlined style={{ color: "#1890ff", fontSize: "18px" }} />
             </div>
             {!collapsed && (
               <div>
-                <h2 className="!text-white !font-bold !font-serif !text-lg">
+                <h2
+                  style={{
+                    color: "white",
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                    margin: 0,
+                  }}
+                >
                   Admin Panel
                 </h2>
-                <p className="!text-amber-100 !text-xs -mt-1">
+                <p style={{ color: "#b3d9ff", fontSize: "12px", margin: 0 }}>
                   Book Management
                 </p>
               </div>
@@ -160,54 +189,44 @@ const LayoutAdmin = () => {
           mode="inline"
           selectedKeys={[location.pathname]}
           items={siderMenuItems}
-          className="!bg-transparent !border-none !mt-4"
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            marginTop: "16px",
+          }}
         />
       </Sider>
 
       {/* Main Layout */}
-      <Layout
-        className={`!transition-all !duration-200 ${
-          collapsed ? "!ml-20" : "!ml-64"
-        }`}
-      >
-        {/* Fixed Header */}
+      <Layout style={{ marginLeft: collapsed ? 80 : 250 }}>
+        {/* Header */}
         <Header
-          className={`
-          !fixed !top-0 !right-0 !z-30
-          !bg-gradient-to-r !from-amber-50 !to-orange-100 
-          !border-b-4 !border-amber-800 !shadow-lg
-          !px-4 flex justify-between items-center
-          !transition-all !duration-200
-          ${collapsed ? "!left-20" : "!left-64"}
-        `}
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            left: collapsed ? 80 : 250,
+            zIndex: 999,
+            backgroundColor: "#fff",
+            borderBottom: "1px solid #f0f0f0",
+            padding: "0 16px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
           {/* Left: Toggle & Breadcrumb */}
-          <div className="flex items-center space-x-4">
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <Button
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
-              className="!w-10 !h-10 flex items-center justify-center hover:!bg-amber-200 !border-2 !border-transparent hover:!border-amber-600 !rounded-lg !transition-all !text-amber-800"
             />
-            <Breadcrumb
-              items={getBreadcrumbItems()}
-              className="!text-amber-800 !font-medium"
-            />
+            <Breadcrumb items={getBreadcrumbItems()} />
           </div>
 
           {/* Right: User Profile */}
-          <div className="flex items-center space-x-4">
-            {/* Brand Info */}
-            <div className="hidden lg:block !text-right">
-              <h3 className="!text-amber-900 !font-bold !font-serif !text-lg">
-                Classic Books
-              </h3>
-              <p className="!text-amber-700 !text-xs -mt-1">
-                Administration Panel
-              </p>
-            </div>
-
-            {/* User Dropdown */}
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <Dropdown
               menu={{ items: userMenuItems }}
               placement="bottomRight"
@@ -215,22 +234,14 @@ const LayoutAdmin = () => {
             >
               <Button
                 type="text"
-                className="flex items-center space-x-2 !px-3 !py-2 !h-10 hover:!bg-amber-200 !border-2 !border-transparent hover:!border-amber-600 !rounded-lg !transition-all"
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
               >
-                <Avatar
-                  size="small"
-                  icon={<UserOutlined />}
-                  className="!bg-amber-600"
-                />
-                <Space
-                  direction="vertical"
-                  size={0}
-                  className="hidden sm:block"
-                >
-                  <span className="!text-amber-900 !font-medium !text-sm">
+                <Avatar size="small" icon={<UserOutlined />} />
+                <Space direction="vertical" size={0}>
+                  <span style={{ fontSize: "14px" }}>
                     {user?.fullName || "Admin"}
                   </span>
-                  <span className="!text-amber-700 !text-xs">
+                  <span style={{ fontSize: "12px", color: "#666" }}>
                     {user?.role || "Administrator"}
                   </span>
                 </Space>
@@ -241,25 +252,13 @@ const LayoutAdmin = () => {
 
         {/* Content */}
         <Content
-          className={`
-          !mt-16 !min-h-screen !relative !overflow-hidden
-          !bg-gradient-to-b !from-amber-50 !to-orange-50
-        `}
+          style={{
+            marginTop: "64px",
+            minHeight: "calc(100vh - 64px)",
+            padding: "24px",
+          }}
         >
-          {/* Background Pattern */}
-          <div className="!absolute !inset-0 !opacity-5">
-            <div
-              className="!absolute !inset-0"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
-                backgroundSize: "20px 20px",
-              }}
-            />
-          </div>
-
-          <div className="!relative !z-10 !p-6">
-            <Outlet />
-          </div>
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

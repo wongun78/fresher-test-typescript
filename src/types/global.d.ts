@@ -15,7 +15,7 @@ declare global {
       pages: number;
       total: number;
     };
-    result: T[]; // ✅ Fix: API trả về 'result' thay vì 'results'
+    result: T[];
   }
 
   interface ILogin {
@@ -57,5 +57,11 @@ declare global {
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
+  }
+
+  interface IResponseImport {
+    countSuccess: number;
+    countError: number;
+    detail: any;
   }
 }

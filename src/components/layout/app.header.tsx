@@ -63,68 +63,69 @@ const AppHeader = () => {
   ];
 
   return (
-    <header className="bg-gradient-to-r from-amber-50 to-orange-100 border-b-4 border-amber-800 shadow-lg relative">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+    <header
+      style={{ borderBottom: "1px solid #d9d9d9", backgroundColor: "#fff" }}
+    >
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 16px" }}>
         <div
-          className="absolute inset-0"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: "20px 20px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            height: "64px",
           }}
-        ></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex justify-between items-center h-16">
+        >
           {/* Logo & Brand */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 bg-amber-600 rounded-lg flex items-center justify-center shadow-lg border-2 border-amber-800 group-hover:bg-amber-700 transition-colors">
-              <BookOutlined className="text-white text-xl" />
+          <Link
+            to="/"
+            style={{ display: "flex", alignItems: "center", gap: "12px" }}
+          >
+            <div
+              style={{
+                width: "40px",
+                height: "40px",
+                backgroundColor: "#1890ff",
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <BookOutlined style={{ color: "white", fontSize: "20px" }} />
             </div>
-            <div className="hidden sm:block">
-              <h1 className="text-2xl font-bold !text-amber-900 font-serif tracking-wider">
+            <div>
+              <h1 style={{ fontSize: "24px", fontWeight: "bold", margin: 0 }}>
                 Classic Books
               </h1>
-              <p className="text-xs !text-amber-700 font-medium -mt-1">
+              <p style={{ fontSize: "12px", color: "#666", margin: 0 }}>
                 Literary Collection
               </p>
             </div>
           </Link>
 
           {/* Navigation Menu */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              to="/"
-              className="flex items-center space-x-2 !text-amber-800 hover:!text-amber-900 font-medium transition-colors group"
-            >
-              <span>Home</span>
+          <nav style={{ display: "flex", alignItems: "center", gap: "32px" }}>
+            <Link to="/" style={{ color: "#333", textDecoration: "none" }}>
+              Home
             </Link>
-            <Link
-              to="/book"
-              className="flex items-center space-x-2 !text-amber-800 hover:!text-amber-900 font-medium transition-colors group"
-            >
-              <span>Books</span>
+            <Link to="/book" style={{ color: "#333", textDecoration: "none" }}>
+              Books
             </Link>
-            <Link
-              to="/about"
-              className="flex items-center space-x-2 !text-amber-800 hover:!text-amber-900 font-medium transition-colors group"
-            >
-              <span>About</span>
+            <Link to="/about" style={{ color: "#333", textDecoration: "none" }}>
+              About
             </Link>
           </nav>
 
           {/* User Actions */}
-          <div className="flex items-center space-x-4">
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             {/* Shopping Cart */}
             <Button
               type="text"
               icon={
                 <Badge count={3} size="small">
-                  <ShoppingCartOutlined className="text-xl !text-amber-800" />
+                  <ShoppingCartOutlined style={{ fontSize: "20px" }} />
                 </Badge>
               }
-              className="flex items-center justify-center h-10 w-10 hover:bg-amber-200 border-2 border-transparent hover:border-amber-600 rounded-lg transition-all"
               onClick={() => navigate("/checkout")}
             />
 
@@ -136,14 +137,16 @@ const AppHeader = () => {
               >
                 <Button
                   type="text"
-                  className="flex items-center space-x-2 px-3 py-2 h-10 hover:bg-amber-200 border-2 border-transparent hover:border-amber-600 rounded-lg transition-all"
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
-                  <Avatar
-                    size="small"
-                    icon={<UserOutlined />}
-                    className="bg-amber-600"
-                  />
-                  <span className="hidden sm:block !text-amber-900 font-medium max-w-24 truncate">
+                  <Avatar size="small" icon={<UserOutlined />} />
+                  <span
+                    style={{
+                      maxWidth: "100px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     {user.fullName || user.email}
                   </span>
                 </Button>
@@ -151,23 +154,10 @@ const AppHeader = () => {
             ) : (
               <Space>
                 <Link to="/login">
-                  <Button
-                    type="default"
-                    className="border-2 border-amber-600 !text-amber-800 font-medium hover:bg-amber-600 hover:text-white rounded-lg h-10 px-6 transition-all"
-                  >
-                    Login
-                  </Button>
+                  <Button>Login</Button>
                 </Link>
                 <Link to="/register">
-                  <Button
-                    type="primary"
-                    className="bg-amber-600 border-amber-600 hover:bg-amber-700 hover:border-amber-700 font-medium rounded-lg h-10 px-6 shadow-lg"
-                    style={{
-                      boxShadow: "2px 2px 0px #92400e",
-                    }}
-                  >
-                    Register
-                  </Button>
+                  <Button type="primary">Register</Button>
                 </Link>
               </Space>
             )}

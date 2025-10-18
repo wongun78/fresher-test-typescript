@@ -18,7 +18,6 @@ import DashBoardPage from "./pages/admin/dashboard";
 import ManageOrderPage from "./pages/admin/manage.order";
 import ManageUserPage from "./pages/admin/manage.user";
 import ManageBookPage from "./pages/admin/manage.book";
-import viVN from "antd/locale/vi_VN";
 import enUS from "antd/locale/en_US";
 
 const router = createBrowserRouter([
