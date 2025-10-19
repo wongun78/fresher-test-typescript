@@ -2,10 +2,10 @@ export {};
 
 declare global {
   interface IBackendRes<T> {
-    error?: string | string[];
-    message: string;
     statusCode: number | string;
+    message: string;
     data?: T;
+    error?: string | string[];
   }
 
   interface IModelPaginate<T> {
@@ -18,22 +18,6 @@ declare global {
     result: T[];
   }
 
-  interface ILogin {
-    access_token: string;
-    user: {
-      email: string;
-      phone: string;
-      fullName: string;
-      role: string;
-      avatar: string;
-      id: string;
-    };
-  }
-  interface IRegister {
-    _id: string;
-    email: string;
-    fullName: string;
-  }
   interface IUser {
     email: string;
     phone: string;
@@ -41,6 +25,16 @@ declare global {
     role: string;
     avatar: string;
     id: string;
+  }
+
+  interface ILogin {
+    access_token: string;
+    user: IUser;
+  }
+  interface IRegister {
+    _id: string;
+    email: string;
+    fullName: string;
   }
 
   interface IFetchAccount {
@@ -63,5 +57,19 @@ declare global {
     countSuccess: number;
     countError: number;
     detail: any;
+  }
+
+  interface IBookTable {
+    _id: string;
+    thumbnail: string;
+    slider: string[];
+    mainText: string;
+    author: string;
+    price: number;
+    sold: number;
+    quantity: number;
+    category: string;
+    createdAt: Date;
+    updatedAt: Date;
   }
 }

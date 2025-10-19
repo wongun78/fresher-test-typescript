@@ -4,7 +4,6 @@ import { useState } from "react";
 import type { UploadFile, UploadProps } from "antd";
 import * as ExcelJS from "exceljs";
 import { bulkCreateUserAPI } from "@/services/api";
-
 interface IProps {
   openModalImport: boolean;
   setOpenModalImport: (open: boolean) => void;
@@ -47,8 +46,6 @@ const ImportUser = (props: IProps) => {
         password: import.meta.env.VITE_USER_CREATE_DEFAULT_PASSWORD || "123456",
       }));
 
-      console.log("Submitting data:", dataSubmit);
-
       const res = await bulkCreateUserAPI(dataSubmit);
 
       if (res.data) {
@@ -56,13 +53,12 @@ const ImportUser = (props: IProps) => {
           message: "Import Successful",
           description: `Successfully imported ${res.data.countSuccess} users. Error count: ${res.data.countError}.`,
         });
-        refreshTable(); // Refresh the user table
+        refreshTable();
         handleCancel();
       } else {
         message.error("Import failed. Please try again.");
       }
     } catch (error: any) {
-      console.error("Import error:", error);
       message.error(
         error?.response?.data?.message ||
           error?.message ||

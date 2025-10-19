@@ -47,13 +47,13 @@ const DetailUser = (props: IProps) => {
       width={720}
       onClose={onClose}
       open={openViewDetail}
-      extra={
-        <Space>
-          <Button icon={<EditOutlined />} type="primary">
-            Edit User
-          </Button>
-        </Space>
-      }
+      // extra={
+      //   <Space>
+      //     <Button icon={<EditOutlined />} type="primary">
+      //       Edit User
+      //     </Button>
+      //   </Space>
+      // }
     >
       {dataViewDetail && (
         <div style={{ padding: "24px 0" }}>

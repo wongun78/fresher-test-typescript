@@ -1,5 +1,7 @@
-const ManageBookPage = () => {
-  return <div>Manage Book Page</div>;
+import TableBook from "@/components/admin/book/table.book";
+
+const ManageUserPage = () => {
+  return <TableBook />;
 };
 
-export default ManageBookPage;
+export default ManageUserPage;
