@@ -25,7 +25,7 @@ const UserInfo = () => {
       if (res?.data?.fileUploaded) {
         setAvatar(res.data.fileUploaded);
         message.success("Avatar uploaded successfully!");
-        return false; // Prevent default upload behavior
+        return false;
       }
     } catch (error: any) {
       message.error("Failed to upload avatar!");
@@ -37,13 +37,13 @@ const UserInfo = () => {
     try {
       setIsSubmitting(true);
 
-      if (!user?._id) {
+      if (!user?.id) {
         message.error("User ID is required!");
         return;
       }
 
       const response = await updateUserInfoAPI(
-        user._id,
+        user.id,
         avatar,
         values.fullName,
         values.phone
@@ -51,7 +51,6 @@ const UserInfo = () => {
 
       if (response?.data) {
         message.success("Profile updated successfully!");
-        // Update user in context
         setUser?.({
           ...user,
           fullName: values.fullName,

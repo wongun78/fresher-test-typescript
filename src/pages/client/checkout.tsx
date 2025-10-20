@@ -52,14 +52,12 @@ const CheckoutPage = () => {
     setIsSubmitting(true);
 
     try {
-      // Prepare order detail with book info
       const detail = carts.map((cart) => ({
         bookName: cart.detail.mainText,
         quantity: cart.quantity,
         _id: cart._id,
       }));
 
-      // Call API to create order
       const res = await createOrderAPI(
         values.fullName,
         values.address,
@@ -71,7 +69,6 @@ const CheckoutPage = () => {
 
       if (res && res.data) {
         message.success("Order placed successfully!");
-        // Navigate to payment/success page with order info
         navigate("/payment", {
           state: {
             orderData: values,
@@ -84,7 +81,6 @@ const CheckoutPage = () => {
         message.error("Failed to place order. Please try again.");
       }
     } catch (error) {
-      console.error("Order error:", error);
       message.error("An error occurred while placing your order.");
     } finally {
       setIsSubmitting(false);

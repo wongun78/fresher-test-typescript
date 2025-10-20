@@ -106,12 +106,10 @@ const HomePage = () => {
     let filterStr = "";
     const filters: string[] = [];
 
-    // Xử lý filter category
     if (values?.category && values.category.length > 0) {
       filters.push(`category=${values.category.join(",")}`);
     }
 
-    // Xử lý filter price range
     if (values?.range?.from !== undefined && values?.range?.from >= 0) {
       filters.push(`price>=${values.range.from}`);
     }
@@ -121,7 +119,7 @@ const HomePage = () => {
 
     filterStr = filters.join("&");
     setFilter(filterStr);
-    setCurrent(1); // Reset về trang đầu khi filter
+    setCurrent(1);
   };
 
   const handleResetFilter = () => {

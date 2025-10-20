@@ -53,7 +53,6 @@ const OrderDetail = () => {
 
     const updatedCarts = carts.map((cart) => {
       if (cart._id === bookId) {
-        // Check if quantity exceeds stock
         if (quantity > cart.detail.quantity) {
           message.error(`Only ${cart.detail.quantity} items left in stock`);
           return cart;

@@ -37,7 +37,6 @@ const BookPage = () => {
         }
       }
     } catch (error) {
-      console.error("Error fetching book:", error);
       message.error("Failed to load book details");
     } finally {
       setLoading(false);
@@ -64,10 +63,8 @@ const BookPage = () => {
         );
 
         if (existingCartIndex > -1) {
-          // Update quantity if book already exists in cart
           carts[existingCartIndex].quantity += quantity;
         } else {
-          // Add new book to cart
           carts.push({
             _id: book._id,
             quantity: quantity,
@@ -75,7 +72,6 @@ const BookPage = () => {
           });
         }
       } else {
-        // Create new cart
         carts = [
           {
             _id: book._id,
@@ -85,23 +81,19 @@ const BookPage = () => {
         ];
       }
 
-      // Save to localStorage
       localStorage.setItem("carts", JSON.stringify(carts));
 
       setCarts(carts);
 
       message.success(`Added ${quantity} item(s) to cart successfully`);
     } catch (error) {
-      console.error("Error adding to cart:", error);
       message.error("Failed to add to cart");
     }
   };
 
   const handleBuyNow = () => {
-    // Add to cart first
     handleAddToCart();
 
-    // Then navigate to checkout
     setTimeout(() => {
       navigate("/checkout");
     }, 500);
@@ -116,7 +108,6 @@ const BookPage = () => {
       ]
     : [];
 
-  // Loading state
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -125,7 +116,6 @@ const BookPage = () => {
     );
   }
 
-  // Book not found
   if (!book) {
     return (
       <div className="flex justify-center items-center min-h-screen">

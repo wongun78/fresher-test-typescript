@@ -27,14 +27,12 @@ const PaymentPage = () => {
   const orderId = location.state?.orderId;
 
   useEffect(() => {
-    // Clear cart after successful order
     if (orderData) {
       setCarts?.([]);
       localStorage.removeItem("carts");
     }
   }, [orderData, setCarts]);
 
-  // Redirect if no order data
   if (!orderData) {
     navigate("/");
     return null;

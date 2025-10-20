@@ -37,7 +37,6 @@ const AppHeader = () => {
   };
 
   const handleUpdateQuantity = (bookId: string, quantity: number) => {
-    // Update cart in state and localStorage
     const updatedCarts = carts.map((cart) => {
       if (cart._id === bookId) {
         return { ...cart, quantity };
@@ -50,7 +49,6 @@ const AppHeader = () => {
   };
 
   const handleRemoveItem = (bookId: string) => {
-    // Remove item from cart
     const updatedCarts = carts.filter((cart) => cart._id !== bookId);
     setCarts?.(updatedCarts);
     localStorage.setItem("carts", JSON.stringify(updatedCarts));
