@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getBookByIdAPI } from "@/services/api";
 import { message, Spin, Button } from "antd";
+import { userCurrentApp } from "@/components/context/app.context";
 
 const BookPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { setCarts } = userCurrentApp();
 
   const [book, setBook] = useState<IBookTable | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -49,14 +51,60 @@ const BookPage = () => {
   };
 
   const handleAddToCart = () => {
-    message.success(`Added ${quantity} item(s) to cart`);
-    // TODO: Implement cart logic
+    if (!book) return;
+
+    try {
+      const cartStorage = localStorage.getItem("carts");
+      let carts: ICart[] = [];
+
+      if (cartStorage) {
+        carts = JSON.parse(cartStorage) as ICart[];
+        const existingCartIndex = carts.findIndex(
+          (cart) => cart.detail._id === book._id
+        );
+
+        if (existingCartIndex > -1) {
+          // Update quantity if book already exists in cart
+          carts[existingCartIndex].quantity += quantity;
+        } else {
+          // Add new book to cart
+          carts.push({
+            _id: book._id,
+            quantity: quantity,
+            detail: book,
+          });
+        }
+      } else {
+        // Create new cart
+        carts = [
+          {
+            _id: book._id,
+            quantity: quantity,
+            detail: book,
+          },
+        ];
+      }
+
+      // Save to localStorage
+      localStorage.setItem("carts", JSON.stringify(carts));
+
+      setCarts(carts);
+
+      message.success(`Added ${quantity} item(s) to cart successfully`);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      message.error("Failed to add to cart");
+    }
   };
 
   const handleBuyNow = () => {
-    message.info("Redirecting to checkout...");
-    navigate("/checkout");
-    // TODO: Implement buy now logic
+    // Add to cart first
+    handleAddToCart();
+
+    // Then navigate to checkout
+    setTimeout(() => {
+      navigate("/checkout");
+    }, 500);
   };
 
   const allImages = book
@@ -72,7 +120,7 @@ const BookPage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <Spin size="large" />
+        <Spin size="large" tip="Loading book details..." />
       </div>
     );
   }
@@ -82,7 +130,12 @@ const BookPage = () => {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Book not found</h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-700">
+            Book not found
+          </h2>
+          <p className="text-gray-500 mb-4">
+            The book you're looking for doesn't exist or has been removed.
+          </p>
           <Button type="primary" onClick={() => navigate("/")}>
             Back to Home
           </Button>

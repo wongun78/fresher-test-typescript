@@ -70,9 +70,7 @@ const CreateBook = (props: IProps) => {
         }));
         setCategories(d);
       }
-    } catch (error) {
-      console.error("Failed to fetch categories:", error);
-    }
+    } catch (error) {}
   };
 
   const getBase64 = (file: FileType): Promise<string> =>

@@ -1,21 +1,30 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Avatar, Button, Dropdown, Space, Badge } from "antd";
+import { Avatar, Button, Dropdown, Space, message } from "antd";
 import type { MenuProps } from "antd";
 import {
   UserOutlined,
   LogoutOutlined,
   SettingOutlined,
-  ShoppingCartOutlined,
   BookOutlined,
   DashboardOutlined,
 } from "@ant-design/icons";
 import { logoutAPI } from "@/services/api";
 import { userCurrentApp } from "../context/app.context";
+import CartPopover from "./cart.popover";
+import ManageAccount from "../client/account";
+import { useState } from "react";
 
 const AppHeader = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated, setUser, setIsAuthenticated } =
-    userCurrentApp();
+  const {
+    user,
+    isAuthenticated,
+    setUser,
+    setIsAuthenticated,
+    carts,
+    setCarts,
+  } = userCurrentApp();
+  const [openManageAccount, setOpenManageAccount] = useState(false);
 
   const handleLogout = async () => {
     const res = await logoutAPI();
@@ -27,18 +36,33 @@ const AppHeader = () => {
     }
   };
 
+  const handleUpdateQuantity = (bookId: string, quantity: number) => {
+    // Update cart in state and localStorage
+    const updatedCarts = carts.map((cart) => {
+      if (cart._id === bookId) {
+        return { ...cart, quantity };
+      }
+      return cart;
+    });
+    setCarts?.(updatedCarts);
+    localStorage.setItem("carts", JSON.stringify(updatedCarts));
+    message.success("Cập nhật số lượng thành công");
+  };
+
+  const handleRemoveItem = (bookId: string) => {
+    // Remove item from cart
+    const updatedCarts = carts.filter((cart) => cart._id !== bookId);
+    setCarts?.(updatedCarts);
+    localStorage.setItem("carts", JSON.stringify(updatedCarts));
+    message.success("Đã xóa sản phẩm khỏi giỏ hàng");
+  };
+
   const userMenuItems: MenuProps["items"] = [
     {
       key: "profile",
       label: "Profile",
       icon: <UserOutlined />,
-      onClick: () => navigate("/profile"),
-    },
-    {
-      key: "settings",
-      label: "Settings",
-      icon: <SettingOutlined />,
-      onClick: () => navigate("/settings"),
+      onClick: () => setOpenManageAccount(true),
     },
     ...(user?.role === "ADMIN"
       ? [
@@ -103,27 +127,13 @@ const AppHeader = () => {
             </div>
           </Link>
 
-          {/* Navigation Menu */}
-          <nav style={{ display: "flex", alignItems: "center", gap: "32px" }}>
-            <Link to="/" style={{ color: "#333", textDecoration: "none" }}>
-              Home
-            </Link>
-            <Link to="/about" style={{ color: "#333", textDecoration: "none" }}>
-              About
-            </Link>
-          </nav>
-
           {/* User Actions */}
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             {/* Shopping Cart */}
-            <Button
-              type="text"
-              icon={
-                <Badge count={3} size="small">
-                  <ShoppingCartOutlined style={{ fontSize: "20px" }} />
-                </Badge>
-              }
-              onClick={() => navigate("/checkout")}
+            <CartPopover
+              carts={carts}
+              onUpdateQuantity={handleUpdateQuantity}
+              onRemoveItem={handleRemoveItem}
             />
 
             {isAuthenticated && user ? (
@@ -161,6 +171,11 @@ const AppHeader = () => {
           </div>
         </div>
       </div>
+
+      <ManageAccount
+        openModal={openManageAccount}
+        setOpenModal={setOpenManageAccount}
+      />
     </header>
   );
 };

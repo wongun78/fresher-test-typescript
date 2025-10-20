@@ -103,8 +103,6 @@ const HomePage = () => {
   };
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-    console.log("Form values:", values);
-
     let filterStr = "";
     const filters: string[] = [];
 
@@ -132,7 +130,6 @@ const HomePage = () => {
     setCurrent(1);
   };
 
-  // ✅ FIX: Simplify sort logic
   const handleSortChange = (value: string) => {
     setSortQuery(value);
   };

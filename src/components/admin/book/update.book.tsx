@@ -65,14 +65,9 @@ const UpdateBook = (props: IProps) => {
   const [loadingThumbnail, setLoadingThumbnail] = useState<boolean>(false);
   const [loadingSlider, setLoadingSlider] = useState<boolean>(false);
 
-  // Debug effect to monitor file list changes
-  useEffect(() => {
-    console.log("thumbnailFileList changed:", thumbnailFileList);
-  }, [thumbnailFileList]);
+  useEffect(() => {}, [thumbnailFileList]);
 
-  useEffect(() => {
-    console.log("sliderFileList changed:", sliderFileList);
-  }, [sliderFileList]);
+  useEffect(() => {}, [sliderFileList]);
 
   useEffect(() => {
     fetchCategories();
@@ -80,8 +75,6 @@ const UpdateBook = (props: IProps) => {
 
   useEffect(() => {
     if (openModalUpdate && dataUpdate) {
-      console.log("dataUpdate:", dataUpdate);
-      console.log("VITE_BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
       form.setFieldsValue({
         _id: dataUpdate._id,
         mainText: dataUpdate.mainText,
@@ -92,13 +85,10 @@ const UpdateBook = (props: IProps) => {
         sold: dataUpdate.sold || 0,
       });
 
-      // Setup thumbnail
       if (dataUpdate.thumbnail) {
-        console.log("Setting up thumbnail:", dataUpdate.thumbnail);
         const thumbnailUrl = `${import.meta.env.VITE_BACKEND_URL}/images/book/${
           dataUpdate.thumbnail
         }`;
-        console.log("Thumbnail URL:", thumbnailUrl);
         const thumbnailFile: UploadFile = {
           uid: "thumbnail-1",
           name: dataUpdate.thumbnail,
@@ -106,21 +96,16 @@ const UpdateBook = (props: IProps) => {
           url: thumbnailUrl,
         };
         setThumbnailFileList([thumbnailFile]);
-        console.log("Thumbnail file list set:", [thumbnailFile]);
       } else {
-        console.log("No thumbnail found in dataUpdate");
         setThumbnailFileList([]);
       }
 
-      // Setup slider
       if (dataUpdate.slider && dataUpdate.slider.length > 0) {
-        console.log("Setting up slider:", dataUpdate.slider);
         const sliderFiles: UploadFile[] = dataUpdate.slider.map(
           (item, index) => {
             const sliderUrl = `${
               import.meta.env.VITE_BACKEND_URL
             }/images/book/${item}`;
-            console.log(`Slider ${index} URL:`, sliderUrl);
             return {
               uid: `slider-${index}`,
               name: item,
@@ -130,9 +115,7 @@ const UpdateBook = (props: IProps) => {
           }
         );
         setSliderFileList(sliderFiles);
-        console.log("Slider file list set:", sliderFiles);
       } else {
-        console.log("No slider found in dataUpdate");
         setSliderFileList([]);
       }
     }
@@ -148,9 +131,7 @@ const UpdateBook = (props: IProps) => {
         }));
         setCategories(d);
       }
-    } catch (error) {
-      console.error("Failed to fetch categories:", error);
-    }
+    } catch (error) {}
   };
 
   const getBase64 = (file: FileType): Promise<string> =>
@@ -268,17 +249,6 @@ const UpdateBook = (props: IProps) => {
       const { mainText, author, price, category, quantity, sold = 0 } = values;
       const thumbnail = thumbnailFileList?.[0]?.name ?? "";
       const slider = sliderFileList?.map((item) => item.name) ?? [];
-
-      console.log("Submitting update with:", {
-        mainText,
-        author,
-        price,
-        category,
-        quantity,
-        sold,
-        thumbnail,
-        slider,
-      });
 
       const response = await updateBookAPI(
         dataUpdate._id,

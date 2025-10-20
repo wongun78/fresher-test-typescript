@@ -117,22 +117,6 @@ const BookDetail = (props: IProps) => {
                 <span className="font-semibold">{book.author}</span>
               </div>
 
-              {/* Category */}
-              <div className="mb-4">
-                <span className="text-gray-600">Category: </span>
-                <Tag color="blue">{book.category}</Tag>
-              </div>
-
-              {/* Stock Status */}
-              <div className="mb-6">
-                <span className="text-gray-600">Stock: </span>
-                {book.quantity > 0 ? (
-                  <Tag color="success">{book.quantity} available</Tag>
-                ) : (
-                  <Tag color="error">Out of Stock</Tag>
-                )}
-              </div>
-
               <Divider />
 
               {/* Quantity Selector */}
