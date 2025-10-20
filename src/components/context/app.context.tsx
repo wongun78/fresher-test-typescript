@@ -24,30 +24,37 @@ export const AppProvider = (props: TProps) => {
 
   useEffect(() => {
     const fetchAccount = async () => {
-      const res = await fetchAccountAPI();
-      if (res?.data) {
-        setUser(res.data.user);
-        setIsAuthenticated(true);
+      try {
+        const res = await fetchAccountAPI();
+        if (res?.data) {
+          setUser(res.data.user);
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.log("User not authenticated");
+      } finally {
+        setIsAppLoading(false);
       }
-      setIsAppLoading(false);
     };
     fetchAccount();
   }, []);
 
-  // if (isAppLoading) {
-  //   return (
-  //     <div
-  //       style={{
-  //         position: "fixed",
-  //         top: "50%",
-  //         left: "50%",
-  //         transform: "translate(-50%, -50%)",
-  //       }}
-  //     >
-  //       <PacmanLoader loading={isAppLoading} size={30} />
-  //     </div>
-  //   );
-  // }
+  if (isAppLoading) {
+    return (
+      <div
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          textAlign: "center",
+        }}
+      >
+        <PacmanLoader color="#1677ff" size={25} />
+        <p style={{ marginTop: "20px", color: "#666" }}>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <CurrentAppContext.Provider

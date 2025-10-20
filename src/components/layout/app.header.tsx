@@ -108,9 +108,6 @@ const AppHeader = () => {
             <Link to="/" style={{ color: "#333", textDecoration: "none" }}>
               Home
             </Link>
-            <Link to="/book" style={{ color: "#333", textDecoration: "none" }}>
-              Books
-            </Link>
             <Link to="/about" style={{ color: "#333", textDecoration: "none" }}>
               About
             </Link>
