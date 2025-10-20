@@ -77,12 +77,7 @@ const PaymentPage = () => {
           }
           extra={[
             <div key="actions" className="flex gap-3 justify-center">
-              <Button
-                type="primary"
-                size="large"
-                icon={<HomeOutlined />}
-                onClick={() => navigate("/")}
-              >
+              <Button type="primary" size="large" onClick={() => navigate("/")}>
                 Back to Home
               </Button>
             </div>,

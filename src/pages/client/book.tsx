@@ -8,7 +8,7 @@ import { userCurrentApp } from "@/components/context/app.context";
 const BookPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { setCarts } = userCurrentApp();
+  const { setCarts, isAuthenticated } = userCurrentApp();
 
   const [book, setBook] = useState<IBookTable | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -52,6 +52,13 @@ const BookPage = () => {
   const handleAddToCart = () => {
     if (!book) return;
 
+    // Check if user is logged in
+    if (!isAuthenticated) {
+      message.warning("Please login to add items to cart");
+      navigate("/login");
+      return;
+    }
+
     try {
       const cartStorage = localStorage.getItem("carts");
       let carts: ICart[] = [];
@@ -92,6 +99,13 @@ const BookPage = () => {
   };
 
   const handleBuyNow = () => {
+    // Check if user is logged in
+    if (!isAuthenticated) {
+      message.warning("Please login to purchase");
+      navigate("/login");
+      return;
+    }
+
     handleAddToCart();
 
     setTimeout(() => {

@@ -26,7 +26,7 @@ export const fetchAccountAPI = () => {
 };
 
 export const logoutAPI = () => {
-  return axios.post<IBackendRes<ILogin>>("/api/v1/user/logout");
+  return axios.post<IBackendRes<ILogin>>("/api/v1/auth/logout");
 };
 
 export const getUsersAPI = (query: string) => {

@@ -27,11 +27,21 @@ const AppHeader = () => {
   const [openManageAccount, setOpenManageAccount] = useState(false);
 
   const handleLogout = async () => {
-    const res = await logoutAPI();
-    if (res.data) {
+    try {
+      const res = await logoutAPI();
+      if (res.data) {
+        message.success("Logged out successfully!");
+      }
+    } catch (error) {
+      console.log("Logout error:", error);
+      message.warning("Logged out from client");
+    } finally {
+      // Always clear client-side data regardless of API response
       setUser?.(null);
       setIsAuthenticated?.(false);
       localStorage.removeItem("access_token");
+      localStorage.removeItem("carts");
+      setCarts?.([]);
       navigate("/");
     }
   };
